@@ -496,36 +496,46 @@ const VideoTabs = (() => {
 
 const BgAudio = (() => {
   function init() {
-    const audio = document.getElementById('bg-audio');
-    const btn   = document.getElementById('btn-music');
-    if (!audio || !btn) return;
+    const audio   = document.getElementById('bg-audio');
+    const btnMute = document.getElementById('btn-music');
+    const splash  = document.getElementById('splash-overlay');
+    const btnStart = document.getElementById('btn-start');
+
+    if (!audio) return;
 
     let muted = false;
 
-    // Start audio on first user interaction
-    function tryStart() {
-      audio.volume = 0.6;
-      audio.play().catch(() => {});
-      document.removeEventListener('click', tryStart);
-      document.removeEventListener('touchstart', tryStart);
-    }
-
-    document.addEventListener('click', tryStart);
-    document.addEventListener('touchstart', tryStart);
-
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation(); // don't re-trigger tryStart
-      muted = !muted;
-      audio.muted = muted;
-      btn.textContent = muted ? '🔇' : '🎵';
-      btn.classList.toggle('is-muted', muted);
-
-      // If audio hasn't started yet, start it now
-      if (!muted && audio.paused) {
+    // ── Splash "Commencer" button ─────────────────────────────
+    if (btnStart && splash) {
+      btnStart.addEventListener('click', () => {
+        // Start audio — this click satisfies browser autoplay policy
         audio.volume = 0.6;
         audio.play().catch(() => {});
-      }
-    });
+
+        // Fade out and remove splash
+        splash.classList.add('hidden');
+        setTimeout(() => {
+          splash.style.display = 'none';
+        }, 650);
+      });
+    }
+
+    // ── Music mute toggle (🎵/🔇) ────────────────────────────
+    if (btnMute) {
+      btnMute.addEventListener('click', (e) => {
+        e.stopPropagation();
+        muted = !muted;
+        audio.muted = muted;
+        btnMute.textContent = muted ? '🔇' : '🎵';
+        btnMute.classList.toggle('is-muted', muted);
+
+        // If audio not started yet, start it now
+        if (!muted && audio.paused) {
+          audio.volume = 0.6;
+          audio.play().catch(() => {});
+        }
+      });
+    }
   }
 
   return { init };
