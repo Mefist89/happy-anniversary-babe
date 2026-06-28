@@ -1,16 +1,132 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="description" content="A special birthday surprise crafted just for you, with love from Paris." />
+  <meta name="description" content="A special birthday surprise crafted just for you, with love." />
   <title>Joyeux Anniversaire, mon Babe 🌹</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Page transition ─────────────────────────────────────── */
+    #page-content {
+      transition: opacity 0.22s ease;
+    }
+    #page-content.fading {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* ── Tap-to-Start Splash ─────────────────────────────────── */
+    #splash-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      background: rgba(5, 10, 20, 0.94);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      text-align: center;
+      padding: 32px;
+      transition: opacity 0.6s ease;
+    }
+    #splash-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .splash-icon {
+      font-size: 64px;
+      animation: heartPop 1.8s ease-in-out infinite;
+      filter: drop-shadow(0 0 20px rgba(212, 168, 85, 0.5));
+    }
+    .splash-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(22px, 6vw, 32px);
+      color: #fff;
+      letter-spacing: 0.01em;
+      margin: 0;
+    }
+    .splash-sub {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: rgba(255,255,255,0.5);
+      margin: -12px 0 0;
+    }
+    #btn-start {
+      margin-top: 8px;
+      background: linear-gradient(135deg, #D4A855, #f0c97a);
+      color: #0a0f1e;
+      border: none;
+      border-radius: 999px;
+      padding: 16px 40px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      cursor: pointer;
+      box-shadow: 0 8px 32px rgba(212, 168, 85, 0.45);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    #btn-start:hover {
+      transform: scale(1.05);
+      box-shadow: 0 12px 40px rgba(212, 168, 85, 0.6);
+    }
+    #btn-start:active {
+      transform: scale(0.97);
+    }
+
+    /* ── Music toggle button ─────────────────────────────────── */
+    #btn-music {
+      position: fixed;
+      bottom: 24px;
+      right: 20px;
+      z-index: 200;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(5, 10, 20, 0.70);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(212, 168, 85, 0.35);
+      color: var(--gold, #D4A855);
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      transition: transform 0.2s ease, border-color 0.3s ease;
+    }
+    #btn-music:hover {
+      transform: scale(1.1);
+      border-color: rgba(212, 168, 85, 0.7);
+    }
+    #btn-music.is-muted {
+      opacity: 0.5;
+    }
+  </style>
 </head>
 <body>
+
+  <!-- Hidden background audio — plays forever -->
+  <audio id="bg-audio" src="audio/audio.mp3" loop preload="auto"></audio>
+
+  <!-- Tap-to-start splash (ensures audio plays on mobile / Vercel) -->
+  <div id="splash-overlay" role="dialog" aria-modal="true" aria-label="Start experience">
+    <div class="splash-icon">🌹</div>
+    <h2 class="splash-title">Pour toi, mon Babe</h2>
+    <p class="splash-sub">Appuie pour commencer avec la musique</p>
+    <button id="btn-start">✨ Commencer ✨</button>
+  </div>
+
+  <!-- Music toggle -->
+  <button id="btn-music" aria-label="Toggle music" title="Musique">🎵</button>
 
   <!-- Background Layers -->
   <div class="bg-static" aria-hidden="true"></div>
@@ -24,47 +140,20 @@
   </div>
   <div class="petals-container" id="petals-container" aria-hidden="true"></div>
 
-  <!-- Page progress dots -->
-  <nav class="page-progress" aria-label="Page navigation">
+  <!-- Persistent progress dots -->
+  <nav class="page-progress" id="page-nav" aria-label="Page navigation">
     <span class="dot dot--active" aria-label="Page 1: Welcome"></span>
-    <span class="dot" aria-label="Page 2: Song"></span>
-    <span class="dot" aria-label="Page 3: Cake"></span>
-    <span class="dot" aria-label="Page 4: Letter"></span>
+    <span class="dot" aria-label="Page 2: Texte"></span>
+    <span class="dot" aria-label="Page 3: Gâteau"></span>
+    <span class="dot" aria-label="Page 4: Lettre"></span>
     <span class="dot" aria-label="Page 5: Surprise"></span>
   </nav>
 
-  <main class="page-wrapper page-wrapper--hero">
-    <div class="hero-content">
-      <div class="hero-date-badge">
-        <span class="hero-date-icon">✦</span>
-        <span>Ce jour est pour toi</span>
-        <span class="hero-date-icon">✦</span>
-      </div>
+  <!-- Dynamic page content injected here -->
+  <div id="page-content"></div>
 
-      <h1 class="hero-title">
-        Joyeux Anniversaire,<br/>
-        <em class="hero-title-name">mon Babe</em>
-      </h1>
-
-      <p class="hero-subtitle">Aujourd'hui, tout est pour toi.</p>
-
-      <div class="hero-hearts" aria-hidden="true">
-        <span>🌹</span><span>💛</span><span>🌹</span>
-      </div>
-    </div>
-
-    <!-- Navigation -->
-    <div class="hero-nav">
-      <p class="hero-nav-hint">J'ai quelque chose pour toi...</p>
-      <a href="text.html" class="btn-next btn-next--hero" id="btn-enter" aria-label="Ouvrir la surprise">
-        <span>Ouvrir</span>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-          <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </a>
-    </div>
-  </main>
-
+  <!-- confetti (used on cake page) -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

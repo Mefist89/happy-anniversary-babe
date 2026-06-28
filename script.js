@@ -546,7 +546,7 @@ const BgAudio = (() => {
 // ============================================================
 
 const SpaRouter = (() => {
-  const PAGES = ['index.html', 'text.html', 'cake.html', 'letter.html', 'chibi.html'];
+  const PAGES = ['app.html', 'text.html', 'cake.html', 'letter.html', 'chibi.html'];
 
   function getPageContent() { return document.getElementById('page-content'); }
   function getDots()        { return document.querySelectorAll('#page-nav .dot'); }
@@ -622,19 +622,13 @@ const SpaRouter = (() => {
   function init() {
     if (!document.getElementById('page-content')) return;
 
-    // Determine start page from URL
-    const path = location.pathname.split('/').pop() || '';
-    const startPage = PAGES.includes(path) ? path : 'index.html';
-    const startIndex = Math.max(0, PAGES.indexOf(startPage));
-
-    // Navigate to start page without pushing state
-    navigate(startPage, false).then(() => {
-      history.replaceState({ page: startPage, index: startIndex }, '', startPage);
-    });
+    // Always load the welcome page (app.html) into #page-content on start.
+    // Never change the URL — user stays on index.html the entire time.
+    navigate('app.html', false);
 
     // Handle browser back / forward
     window.addEventListener('popstate', (e) => {
-      const page = e.state?.page || 'index.html';
+      const page = e.state?.page || 'app.html';
       navigate(page, false);
     });
   }
