@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" content="A special birthday surprise crafted just for you, with love." />
+  <title>Joyeux Anniversaire, mon Babe 🌹</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Page transition ─────────────────────────────────────── */
+    #page-content {
+      transition: opacity 0.22s ease;
+    }
+    #page-content.fading {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* ── Music toggle button ─────────────────────────────────── */
+    #btn-music {
+      position: fixed;
+      bottom: 24px;
+      right: 20px;
+      z-index: 200;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(5, 10, 20, 0.70);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(212, 168, 85, 0.35);
+      color: var(--gold, #D4A855);
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      transition: transform 0.2s ease, border-color 0.3s ease;
+    }
+    #btn-music:hover {
+      transform: scale(1.1);
+      border-color: rgba(212, 168, 85, 0.7);
+    }
+    #btn-music.is-muted {
+      opacity: 0.5;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hidden background audio — plays forever -->
+  <audio id="bg-audio" src="audio/audio.mp3" loop preload="auto"></audio>
+
+  <!-- Music toggle -->
+  <button id="btn-music" aria-label="Toggle music" title="Musique">🎵</button>
+
+  <!-- Background Layers -->
+  <div class="bg-static" aria-hidden="true"></div>
+  <div class="bg-sparkle" aria-hidden="true">
+    <span class="sparkle-dot"></span><span class="sparkle-dot"></span>
+    <span class="sparkle-dot"></span><span class="sparkle-dot"></span>
+    <span class="sparkle-dot"></span><span class="sparkle-dot"></span>
+    <span class="sparkle-dot"></span><span class="sparkle-dot"></span>
+    <span class="sparkle-dot"></span><span class="sparkle-dot"></span>
+    <span class="sparkle-dot"></span><span class="sparkle-dot"></span>
+  </div>
+  <div class="petals-container" id="petals-container" aria-hidden="true"></div>
+
+  <!-- Persistent progress dots -->
+  <nav class="page-progress" id="page-nav" aria-label="Page navigation">
+    <span class="dot dot--active" aria-label="Page 1: Welcome"></span>
+    <span class="dot" aria-label="Page 2: Texte"></span>
+    <span class="dot" aria-label="Page 3: Gâteau"></span>
+    <span class="dot" aria-label="Page 4: Lettre"></span>
+    <span class="dot" aria-label="Page 5: Surprise"></span>
+  </nav>
+
+  <!-- Dynamic page content injected here -->
+  <div id="page-content"></div>
+
+  <!-- confetti (used on cake page) -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

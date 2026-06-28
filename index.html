@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" content="A special birthday surprise crafted just for you, with love from Paris." />
+  <title>Joyeux Anniversaire, mon Babe 🌹</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Background Layers -->
+  <div class="bg-static" aria-hidden="true"></div>
+  <div class="bg-sparkle" aria-hidden="true">
+    <span class="sparkle-dot"></span><span class="sparkle-dot"></span>
+    <span class="sparkle-dot"></span><span class="sparkle-dot"></span>
+    <span class="sparkle-dot"></span><span class="sparkle-dot"></span>
+    <span class="sparkle-dot"></span><span class="sparkle-dot"></span>
+    <span class="sparkle-dot"></span><span class="sparkle-dot"></span>
+    <span class="sparkle-dot"></span><span class="sparkle-dot"></span>
+  </div>
+  <div class="petals-container" id="petals-container" aria-hidden="true"></div>
+
+  <!-- Page progress dots -->
+  <nav class="page-progress" aria-label="Page navigation">
+    <span class="dot dot--active" aria-label="Page 1: Welcome"></span>
+    <span class="dot" aria-label="Page 2: Song"></span>
+    <span class="dot" aria-label="Page 3: Cake"></span>
+    <span class="dot" aria-label="Page 4: Letter"></span>
+    <span class="dot" aria-label="Page 5: Surprise"></span>
+  </nav>
+
+  <main class="page-wrapper page-wrapper--hero">
+    <div class="hero-content">
+      <div class="hero-date-badge">
+        <span class="hero-date-icon">✦</span>
+        <span>Ce jour est pour toi</span>
+        <span class="hero-date-icon">✦</span>
+      </div>
+
+      <h1 class="hero-title">
+        Joyeux Anniversaire,<br/>
+        <em class="hero-title-name">mon Babe</em>
+      </h1>
+
+      <p class="hero-subtitle">Aujourd'hui, tout est pour toi.</p>
+
+      <div class="hero-hearts" aria-hidden="true">
+        <span>🌹</span><span>💛</span><span>🌹</span>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="hero-nav">
+      <p class="hero-nav-hint">J'ai quelque chose pour toi...</p>
+      <a href="text.html" class="btn-next btn-next--hero" id="btn-enter" aria-label="Ouvrir la surprise">
+        <span>Ouvrir</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
